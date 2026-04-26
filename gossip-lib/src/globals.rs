@@ -233,7 +233,11 @@ lazy_static! {
         // We start in the Offline state
         let (write_runstate, read_runstate) = watcher::channel(RunState::Initializing);
 
-        let spam_filter_engine = Engine::new();
+        let mut spam_filter_engine = Engine::new();
+        spam_filter_engine.set_max_string_size(1_048_576);
+        spam_filter_engine.set_max_call_levels(32);
+        spam_filter_engine.set_max_operations(65_536);
+
         let spam_filter = crate::spam_filter::load_script(&spam_filter_engine);
 
         Globals {
