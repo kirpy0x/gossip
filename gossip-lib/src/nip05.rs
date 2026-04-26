@@ -177,6 +177,11 @@ pub fn parse_nip05(nip05: &str) -> Result<(String, String), Error> {
             // smallest non-TLD domain is like 't.co'
             return Err(ErrorKind::InvalidDnsId.into());
         }
+        if let Ok(ipaddr) = domain.parse::<core_net::IpAddr>() {
+            if ! ipaddr.is_global() {
+                return Err(ErrorKind::InvalidDnsId.into());
+            }
+        }
         Ok((user.to_string(), domain.to_string()))
     }
 }

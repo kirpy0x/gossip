@@ -2476,6 +2476,7 @@ dependencies = [
  "base64 0.22.1",
  "bech32",
  "blurhash",
+ "core-net",
  "dashmap",
  "dirs",
  "encoding_rs",
