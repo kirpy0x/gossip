@@ -3426,11 +3426,15 @@ impl Overlord {
             let conn = nostr_types::client::Client::new(relay_url.as_str());
 
             tracing::debug!(target: "client", "post_event_and_wait_for_result...");
+
+            let lockable = GLOBALS.identity.inner_lockable()
+                .ok_or(Error::from("identity not available for relay test"))?;
+
             let posted_outbox = match conn
                 .post_event_and_wait_for_result(
                     outbox_event.clone(),
                     timeout,
-                    Some(GLOBALS.identity.inner_lockable().unwrap()),
+                    Some(lockable),
                 )
                 .await
             {
@@ -3519,11 +3523,15 @@ impl Overlord {
         // TEST fetching from our INBOX as ourselves
         let fetched_inbox = {
             tracing::debug!(target: "client", "Testing posting to the outbox as ourselves");
+
+            let lockable = GLOBALS.identity.inner_lockable()
+                .ok_or(Error::from("identity not available for relay test"))?;
+
             match conn
                 .subscribe_and_wait_for_events(
                     inbox_filter.clone(),
                     timeout,
-                    Some(GLOBALS.identity.inner_lockable().unwrap()),
+                    Some(lockable),
                 )
                 .await
             {
