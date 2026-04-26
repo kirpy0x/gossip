@@ -330,6 +330,10 @@ fn round_image(image: &mut RgbaImage) {
     let edge_radius = image.width() as f32 / 2.0;
     let edge_radius_squared = edge_radius * edge_radius;
 
+    if image.width() == 0 || image.height() == 0 {
+        return; // nothing to round
+    }
+
     let w = image.width();
     for (pixnum, pixel) in image.pixels_mut().enumerate() {
         // y coordinate
